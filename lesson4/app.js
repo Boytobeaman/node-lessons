@@ -5,6 +5,7 @@ var url = require('url');
 var express = require('express');
 var app = express();
 var ep = new eventproxy();
+var async = require('async');
 
 
 app.get('/', function (req, resss, next) {
@@ -16,42 +17,42 @@ app.get('/', function (req, resss, next) {
     const url = cnodeUrl + `zhouzhuanxiang_${index}.shtml`;
     firstLayURLs.push(url);
   }
+  var fetchUrl = function (url, callback) {
 
-  //to get the html content(that contains the second layer urls) in every first layer urls
-  for (let index = 0; index < firstLayURLs.length; index++) {
-    superagent.get(firstLayURLs[index])
+    console.log("url为" + url);
+    superagent.get(url)
       .end(function (err, res) {
-        console.log('fetch ' + firstLayURLs[index] + ' successful');
-        ep.emit('firstLayhtml', [firstLayURLs[index], res.text]);
+        console.log('fetch ' + url + ' successful');
+        callback(null, [url, res.text]);
       });
   }
+  //to get the html content(that contains the second layer urls) in every first layer urls
+  async.mapLimit(firstLayURLs, 5, function (url, callback) {
+    fetchUrl(url, callback);
+  }, function (err, result) {
+    console.log('first layer final')
+    console.log(JSON.stringify(result));
 
-  //to get the sencond layer urls
-  ep.after('firstLayhtml', firstLayURLs.length, function (topics) {
-
+    //collect the second layer urls
     var secondLayURLs = [];
-    topics.forEach(function (topic) {
+    result.forEach(function (topic) {
       var $ = cheerio.load(topic[1]);
-        $('.cp ul li').each(function (idx, element) {
-          var $element = $(element);
-          var href = url.resolve(cnodeUrl, $element.find(".img a").attr('href'));
-          secondLayURLs.push(href);
-        });
+      $('.cp ul li').each(function (idx, element) {
+        var $element = $(element);
+        var href = url.resolve(cnodeUrl, $element.find(".img a").attr('href'));
+        secondLayURLs.push(href);
+      });
     });
 
-    //crawl 
-    secondLayURLs.forEach(function (secondLayURL) {
-      superagent.get(secondLayURL)
-        .end(function (err, res) {
-          console.log('fetch ' + secondLayURL + ' successful');
-          ep.emit('secondLay_html', [secondLayURL, res.text]);
-        });
-    });
+    //send request for every second layer url
+    async.mapLimit(secondLayURLs, 5, function (url, callback) {
+      fetchUrl(url, callback);
+    }, function (err, result) {
+      console.log('second layer finished')
+      console.log(JSON.stringify(result));
 
-
-
-    ep.after('secondLay_html', secondLayURLs.length, function (topics) {
-      topics = topics.map(function (topicPair) {
+      //after get every second layer content,collect the info
+      result = result.map(function (topicPair) {
         var topicUrl = topicPair[0];
         var topicHtml = topicPair[1];
         var $ = cheerio.load(topicHtml);
@@ -63,15 +64,19 @@ app.get('/', function (req, resss, next) {
       });
 
       console.log('final:');
-      console.log(topics);
-      resss.send(topics);
+      console.log(result);
+      resss.send(result);
     });
-
+  })
 
   })
-   
- 
-})
+
+
+
 app.listen(3000, function () {
   console.log('app is listening at port 3000');
 });
+
+
+
+
