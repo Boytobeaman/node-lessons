@@ -8,6 +8,7 @@ var ep = new eventproxy();
 
 
 app.get('/', function (req, resss, next) {
+  //to get the first layer urls
   var cnodeUrl = 'http://www.pudish.cn/zhouzhuanxiang/';
   var firstLayURLs = [];
   firstLayURLs.push(cnodeUrl)
@@ -16,15 +17,16 @@ app.get('/', function (req, resss, next) {
     firstLayURLs.push(url);
   }
 
+  //to get the html content(that contains the second layer urls) in every first layer urls
   for (let index = 0; index < firstLayURLs.length; index++) {
     superagent.get(firstLayURLs[index])
       .end(function (err, res) {
         console.log('fetch ' + firstLayURLs[index] + ' successful');
         ep.emit('firstLayhtml', [firstLayURLs[index], res.text]);
       });
-    
   }
-  
+
+  //to get the sencond layer urls
   ep.after('firstLayhtml', firstLayURLs.length, function (topics) {
 
     var secondLayURLs = [];
@@ -37,6 +39,7 @@ app.get('/', function (req, resss, next) {
         });
     });
 
+    //crawl 
     secondLayURLs.forEach(function (secondLayURL) {
       superagent.get(secondLayURL)
         .end(function (err, res) {
