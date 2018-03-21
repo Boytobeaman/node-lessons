@@ -1,15 +1,17 @@
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
-    host: "localhost",
+    host: "106.15.204.243",
     user: "root",
-    password: "work168168",
+    password: "ABCsujie168168",
     database: "nodedb"
 });
 
 con.connect(function (err) {
     if (err) throw err;
     console.log("Connected!");
+    var sql = "CREATE TABLE products (id INT AUTO_INCREMENT PRIMARY KEY,title VARCHAR(255), href VARCHAR(255), description VARCHAR(255))";
+    // var sql = "ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY";
 
     // var sql = "ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY";
     // var sql = "INSERT INTO customers (name, address) VALUES ('Company Inc', 'Highway 37')";
@@ -54,10 +56,14 @@ con.connect(function (err) {
     //     console.log(JSON.stringify(result));
     // });
 
-
-    con.query("SELECT * FROM customers ORDER BY name DESC", function (err, result) {
+    con.query(sql, function (err, result) {
         if (err) throw err;
-        console.log(JSON.stringify(result));
+        console.log("Table created");
     });
+
+    // con.query("SELECT * FROM customers ORDER BY name DESC", function (err, result) {
+    //     if (err) throw err;
+    //     console.log(JSON.stringify(result));
+    // });
 
 });

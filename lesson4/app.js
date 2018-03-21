@@ -7,6 +7,9 @@ var app = express();
 var ep = new eventproxy();
 var async = require('async');
 
+var mysql = require('mysql');
+
+
 
 app.get('/', function (req, resss, next) {
   //to get the first layer urls
@@ -27,7 +30,7 @@ app.get('/', function (req, resss, next) {
       });
   }
   //to get the html content(that contains the second layer urls) in every first layer urls
-  async.mapLimit(firstLayURLs, 5, function (url, callback) {
+  async.mapLimit(firstLayURLs, 3, function (url, callback) {
     fetchUrl(url, callback);
   }, function (err, result) {
     console.log('first layer final')
@@ -45,27 +48,50 @@ app.get('/', function (req, resss, next) {
     });
 
     //send request for every second layer url
-    async.mapLimit(secondLayURLs, 5, function (url, callback) {
+    async.mapLimit(secondLayURLs, 3, function (url, callback) {
       fetchUrl(url, callback);
     }, function (err, result) {
       console.log('second layer finished')
       console.log(JSON.stringify(result));
 
       //after get every second layer content,collect the info
-      result = result.map(function (topicPair) {
+      var productDetailArr = result.map(function (topicPair) {
         var topicUrl = topicPair[0];
         var topicHtml = topicPair[1];
         var $ = cheerio.load(topicHtml);
-        return ({
-          title: $('.cp h1').text().trim(),
-          href: topicUrl,
-          desc: $('#c1 p span').text().trim(),
+        // return ({
+        //   title: $('.cp h1').text().trim(),
+        //   href: topicUrl,
+        //   desc: $('#c1 p span').text().trim(),
+        // });
+        return ([
+          $('.cp h1').text().trim(),
+          topicUrl,
+          $('#c1 p span').text().trim()
+        ]);
+      
+      });
+
+      var con = mysql.createConnection({
+        host: "106.15.204.243",
+        user: "root",
+        password: "ABCsujie168168",
+        database: "nodedb"
+      });
+      con.connect(function (err) {
+        if (err) throw err;
+        console.log("Connected!");
+        var sql = "INSERT INTO products (title, href, description) VALUES ?";
+        
+        con.query(sql, [productDetailArr], function (err, result) {
+          if (err) throw err;
+          console.log("Number of records inserted: " + result.affectedRows);
         });
       });
 
       console.log('final:');
-      console.log(result);
-      resss.send(result);
+      console.log(productDetailArr);
+      resss.send(productDetailArr);
     });
   })
 
