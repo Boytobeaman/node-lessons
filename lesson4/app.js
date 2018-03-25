@@ -9,9 +9,7 @@ var async = require('async');
 
 var mysql = require('mysql');
 
-
-
-app.get('/', function (req, resss, next) {
+// app.get('/', function (req, resss, next) {
   //to get the first layer urls
   var cnodeUrl = 'http://www.pudish.cn/zhouzhuanxiang/';
   var firstLayURLs = [];
@@ -95,13 +93,13 @@ app.get('/', function (req, resss, next) {
     });
   })
 
-  })
+  // })
 
 
 
-app.listen(3000, function () {
-  console.log('app is listening at port 3000');
-});
+// app.listen(3000, function () {
+//   console.log('app is listening at port 3000');
+// });
 
 
 
