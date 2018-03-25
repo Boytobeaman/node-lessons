@@ -67,7 +67,7 @@ app.get('/', function (req, resss, next) {
         return ([
           $('.cp h1').text().trim(),
           topicUrl,
-          $('#c1 p span').text().trim()
+          $('#c1').html()
         ]);
       
       });
