@@ -89,7 +89,6 @@ var mysql = require('mysql');
 
       console.log('final:');
       console.log(productDetailArr);
-      resss.send(productDetailArr);
     });
   })
 
