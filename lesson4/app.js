@@ -37,7 +37,7 @@ var mysql = require('mysql');
     //collect the second layer urls
     var secondLayURLs = [];
     result.forEach(function (topic) {
-      var $ = cheerio.load(topic[1]);
+      var $ = cheerio.load(topic[1], { decodeEntities: false });
       $('.cp ul li').each(function (idx, element) {
         var $element = $(element);
         var href = url.resolve(cnodeUrl, $element.find(".img a").attr('href'));
@@ -56,7 +56,7 @@ var mysql = require('mysql');
       var productDetailArr = result.map(function (topicPair) {
         var topicUrl = topicPair[0];
         var topicHtml = topicPair[1];
-        var $ = cheerio.load(topicHtml);
+        var $ = cheerio.load(topicHtml, { decodeEntities: false });
         // return ({
         //   title: $('.cp h1').text().trim(),
         //   href: topicUrl,
