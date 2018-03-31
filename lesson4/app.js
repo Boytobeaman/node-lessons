@@ -11,12 +11,12 @@ var mysql = require('mysql');
 
 var path = require('path');
 
-var baseURL = 'http://www.pudish.cn';
+var baseURL = 'http://www.chinapudi.cn';
 
 
 // app.get('/', function (req, resss, next) {
   //to get the first layer urls
-  var cnodeUrl = 'http://www.pudish.cn/zhouzhuanxiang/';
+  var cnodeUrl = 'http://www.chinapudi.cn/zhouzhuanxiang/';
   var firstLayURLs = [];
   firstLayURLs.push(cnodeUrl)
   for (let index = 2; index < 22; index++) {
@@ -70,11 +70,14 @@ var baseURL = 'http://www.pudish.cn';
         var imgPath = $(".cp_top_img img").attr("src");
         if (imgPath) {
           if (imgPath.indexOf(baseURL) == -1) {
-            imgPath = path.join(baseURL, imgPath)
+            imgPath = baseURL+imgPath;
           }
         }
-        
-        var short_desc = $(".cp_top_js").html()
+        var short_desc = $(".cp_top_js_txt table").html();
+        // get rid of new line
+        if (short_desc) {
+          short_desc = short_desc.replace(/[\r\n]/g, '')
+        }
         return ([
           $('.cp h1').text().trim(), //title
           $('#c1').html(), //long description
@@ -83,6 +86,7 @@ var baseURL = 'http://www.pudish.cn';
         ]);
       
       });
+      productDetailArr = productDetailArr.filter((i) => i[0] != null)
 
       var con = mysql.createConnection({
         host: "106.15.204.243",
