@@ -68,9 +68,12 @@ var baseURL = 'http://www.pudish.cn';
         //   desc: $('#c1 p span').text().trim(),
         // });
         var imgPath = $(".cp_top_img img").attr("src");
-        if (imgPath.indexOf(baseURL) == -1) {
-          imgPath = path.join(baseURL,imgPath)
+        if (imgPath) {
+          if (imgPath.indexOf(baseURL) == -1) {
+            imgPath = path.join(baseURL, imgPath)
+          }
         }
+        
         var short_desc = $(".cp_top_js").html()
         return ([
           $('.cp h1').text().trim(), //title
