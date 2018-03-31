@@ -9,6 +9,11 @@ var async = require('async');
 
 var mysql = require('mysql');
 
+var path = require('path');
+
+var baseURL = 'http://www.pudish.cn';
+
+
 // app.get('/', function (req, resss, next) {
   //to get the first layer urls
   var cnodeUrl = 'http://www.pudish.cn/zhouzhuanxiang/';
@@ -62,10 +67,16 @@ var mysql = require('mysql');
         //   href: topicUrl,
         //   desc: $('#c1 p span').text().trim(),
         // });
+        var imgPath = $(".cp_top_img img").attr("src");
+        if (imgPath.indexOf(baseURL) == -1) {
+          imgPath = path.join(baseURL,imgPath)
+        }
+        var short_desc = $(".cp_top_js").html()
         return ([
-          $('.cp h1').text().trim(),
-          topicUrl,
-          $('#c1').html()
+          $('.cp h1').text().trim(), //title
+          $('#c1').html(), //long description
+          imgPath,//imgpath
+          short_desc //short description
         ]);
       
       });
@@ -79,7 +90,7 @@ var mysql = require('mysql');
       con.connect(function (err) {
         if (err) throw err;
         console.log("Connected!");
-        var sql = "INSERT INTO products (title, href, description) VALUES ?";
+        var sql = "INSERT INTO products (title, description,img_path,short_desc) VALUES ?";
         
         con.query(sql, [productDetailArr], function (err, result) {
           if (err) throw err;
