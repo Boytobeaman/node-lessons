@@ -2,8 +2,6 @@ var superagent = require('superagent');
 var cheerio = require('cheerio');
 var url = require('url');
 
-var app = express();
-
 var async = require('async');
 var mysql = require('mysql');
 var path = require('path');
@@ -22,7 +20,7 @@ var keywordIndex = 0;
 var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
   var firstLayURLs = [];
   firstLayURLs.push(cnodeUrl)
-  for (let index = 2; index < 7; index++) {
+  for (let index = 2; index < 8; index++) {
     const url = cnodeUrl + `page-${index}/`;
     firstLayURLs.push(url);
   }
@@ -47,7 +45,7 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
       var $ = cheerio.load(topic[1], { decodeEntities: false });
       $('.pro_lb0 ul li').each(function (idx, element) {
         var $element = $(element);
-        var href = url.resolve(cnodeUrl, $element.find(".fl").attr('href'));
+        var href = $element.find(".fl a").attr('href');
         secondLayURLs.push(href);
       });
     });
@@ -95,8 +93,8 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
         }
 
         if ($(".prl .spec-scroll ul li").length>0) {
-          $(".prl .spec-scroll ul li").each(function (item) {
-            img_path += baseURL + item.find("img").attr("src");
+          $(".prl .spec-scroll ul li").each(function () {
+            img_path += baseURL + $(this).find("img").attr("src");
           })
         }
        
@@ -128,7 +126,7 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
       con.connect(function (err) {
         if (err) throw err;
         console.log("Connected!");
-        var sql = "INSERT INTO " + lantingpalletbox + " (post_title, external_long,img_path,short_desc) VALUES ?";
+        var sql = "INSERT INTO " + lantingpalletbox + " (post_title, external_long,external_width,short_desc) VALUES ?";
         
         con.query(sql, [productDetailArr], function (err, result) {
           if (err) throw err;
