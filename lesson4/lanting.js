@@ -101,12 +101,12 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
         return ([
           post_title, //title
           external_long, 
-          external_width,//imgpath
-          external_height,//imgpath
-          internal_long,//imgpath
-          internal_width,//imgpath
-          internal_height,//imgpath
-          static_load, //
+          external_width,
+          external_height,
+          internal_long,
+          internal_width,
+          internal_height,
+          static_load, 
           dynamic_load,
           volumn,
           model,
@@ -126,7 +126,24 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
       con.connect(function (err) {
         if (err) throw err;
         console.log("Connected!");
-        var sql = "INSERT INTO " + lantingpalletbox + " (post_title, external_long,external_width,short_desc) VALUES ?";
+        var sql = "INSERT INTO " + lantingpalletbox 
+        + `(
+          post_title,
+          external_long,
+          external_width,
+          external_height,
+          internal_long,
+          internal_width,
+          internal_height,
+          static_load, 
+          dynamic_load,
+          volumn,
+          model,
+          img_path
+        ) VALUES ?`;
+        
+
+
         
         con.query(sql, [productDetailArr], function (err, result) {
           if (err) throw err;
