@@ -6,10 +6,20 @@ var async = require('async');
 var mysql = require('mysql');
 var path = require('path');
 
-var palletBoxKeywords = require('./palletBox');
+// to publish pallet Box products
+var palletBox_obj = require('./keywords/palletBox');
+var palletBoxKeywords = palletBox_obj.keywords;
+
+// if this keyword is too short,we combine two keywords into one
+// as we use this keyword for post title/post url
 var getNewArr = require('./getNewARR');
-const minWordLength = 20;
+// we can set how many characters this word should at least have.
+const minWordLength = 20; 
 const newKeywordArr = getNewArr(palletBoxKeywords, minWordLength)
+
+// to generate dynamic backlinks,using getLinkStr()
+const getLinkStr = require('./getLinks');
+const publishURL = "http://www.joinplastic.com"
 
 var baseURL = 'http://www.cnplasticpallet.com';
 
@@ -57,6 +67,15 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
       console.log('second layer finished')
 
       //after get every second layer content,collect the info
+
+      var product_detail_pic =`
+        <h3>Plastic pallet boxes shipping</h3>
+        <img class="wp-image-404 size-full" src="https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic_pallet_boxes_shipping.png" alt="plastic pallet boxes" width="752" height="802" />
+        <h3>Plastic pallet boxes loading</h3>
+        <img class="alignnone wp-image-403 size-full" src="https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic_pallet_box_loading.png" alt="plastic pallet boxes feature" width="1001" height="593" />
+        <h3>Plastic pallet boxes manufacturer</h3>
+        <img class="alignnone wp-image-402 size-full" src="https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic_bulk_container_company.png" alt="plastic bulk container manufacturers" width="919" height="532" />
+        `;
       var productDetailArr = result.map(function (topicPair) {
         var topicUrl = topicPair[0];
         var topicHtml = topicPair[1];
@@ -73,29 +92,59 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
         var volumn;
         var model;
         var img_path;
-        if ($(".aliDataTable").length>0) {
-          post_title = newKeywordArr[keywordIndex]
-          keywordIndex++;
-          var external_detail = $(".aliDataTable tbody tr").eq(1).find("td").eq(1).find("span").text().split("*");
-          external_long = external_detail[0];
-          external_width = external_detail[1];
-          external_height = external_detail[2];
-          var internal_detail = $(".aliDataTable tbody tr").eq(2).find("td").eq(1).find("span").text().split("*");
-          internal_long = internal_detail[0];
-          internal_width = internal_detail[1];
-          internal_height = internal_detail[2];
-          static_load = $(".aliDataTable tbody tr").eq(4).find("td").eq(1).find("span").text();
-          dynamic_load = $(".aliDataTable tbody tr").eq(5).find("td").eq(1).find("span").text();
-          volumn = $(".aliDataTable tbody tr").eq(6).find("td").eq(1).find("span").text().split("L")[0];
-          model = $(".aliDataTable tbody tr").eq(0).find("td").eq(1).find("span").text();
-        }else{
-          post_title = null;
+        var backlinks = getLinkStr(publishURL);
+
+        post_title = newKeywordArr[keywordIndex]
+        keywordIndex++;
+        var prr_desc = $(".prr>p").text();
+        if (prr_desc.indexOf("1200x1000x975")) {
+          external_long = 1200;
+          external_width = 1000;
+          external_height = 975;
+          internal_long = 1110;
+          internal_width = 910;
+          internal_height = 790;
+          volumn = 800;
+          weight = 66;
+          model = "PB-1210B1";
+        } else if (prr_desc.indexOf("1200x1000x810")) {
+          external_long = 1200;
+          external_width = 1000;
+          external_height = 810;
+          internal_long = 1110;
+          internal_width = 910;
+          internal_height = 800;
+          volumn = 700;
+          weight = 43;
+          model = "PB-1210-COLLAPSIBLE";
+        } else{
+          external_long = 1200;
+          external_width = 1000;
+          external_height = 760;
+          internal_long = 1110;
+          internal_width = 910;
+          internal_height = 750;
+          volumn = 610;
+          weight = 37;
+          model = "PB-1210-SOLID";
         }
+        var material = "100% HDPE";
+        static_load = "4 T";
+        dynamic_load = "1 T";
 
         if ($(".prl .spec-scroll ul li").length>0) {
           $(".prl .spec-scroll ul li").each(function () {
-            img_path += baseURL + $(this).find("img").attr("src");
+            if ($(this).find("img").attr("src")) {
+              img_path += baseURL + $(this).find("img").attr("src") +",";
+            }
           })
+        }else{
+          img_path = `
+          https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic_bulk_bins_for_sale.jpg,
+          https://www.palletboxsale.com/wp-content/uploads/2018/04/pallet_boxes_plastic.png,
+          https://www.palletboxsale.com/wp-content/uploads/2018/04/fruit_pallet_box.jpg,
+          https://www.palletboxsale.com/wp-content/uploads/2018/04/folding_plastic_pallet_boxes.jpg
+          `
         }
        
         return ([
@@ -109,8 +158,12 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
           static_load, 
           dynamic_load,
           volumn,
+          weight,
           model,
-          img_path
+          img_path,
+          product_detail_pic,
+          backlinks,
+          material
         ]);
       
       });
@@ -126,7 +179,7 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
       con.connect(function (err) {
         if (err) throw err;
         console.log("Connected!");
-        var sql = "INSERT INTO " + lantingpalletbox 
+        var sql = "INSERT INTO " + tableName 
         + `(
           post_title,
           external_long,
@@ -138,8 +191,12 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
           static_load, 
           dynamic_load,
           volumn,
+          weight,
           model,
-          img_path
+          img_path,
+          product_detail_pic,
+          backlinks,
+          material
         ) VALUES ?`;
         
 
@@ -156,13 +213,6 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
     });
   })
 
-  // })
-
-
-
-// app.listen(3000, function () {
-//   console.log('app is listening at port 3000');
-// });
 
 
 
