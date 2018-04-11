@@ -78,7 +78,7 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
     });
 
     //send request for every second layer url
-    async.mapLimit(secondLayURLs, 3, function (url, callback) {
+    async.mapLimit(secondLayURLs, 2, function (url, callback) {
       fetchUrl(url, callback);
     }, function (err, result) {
       console.log('second layer finished')
@@ -109,7 +109,7 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
         var volumn;
         var model;
         var img_path;
-        var backlinks = getLinkStr(publishURL);
+        var backlinks = getLinkStr.links(publishURL);
 
         post_title = newKeywordArr[keywordIndex]
         keywordIndex++;
