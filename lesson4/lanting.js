@@ -19,7 +19,24 @@ const newKeywordArr = getNewArr(palletBoxKeywords, minWordLength)
 
 // to generate dynamic backlinks,using getLinkStr()
 const getLinkStr = require('./getLinks');
-const publishURL = "http://www.joinplastic.com"
+const publishURL = "https://www.palletboxsale.com/";
+const preparedImgArr = [
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic_bulk_bins_for_sale.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/pallet_boxes_plastic.png",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/fruit_pallet_box.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/folding_plastic_pallet_boxes.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/large-storage-boxes-with-lids.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/pallet_box.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic_pallet_and_container.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic-box-pallets-for-sale.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic-pallet-boxes-for-sale.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic-pallet-storage-boxes.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/small_plastic_boxes_bulk.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/extra_large_plastic_storage_containers.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic-pallet-containers.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/pallet-bins-for-sale.jpg",
+  "https://www.palletboxsale.com/wp-content/uploads/2018/04/bulk-tote-containers.jpg"
+]
 
 var baseURL = 'http://www.cnplasticpallet.com';
 
@@ -134,17 +151,12 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
 
         if ($(".prl .spec-scroll ul li").length>0) {
           $(".prl .spec-scroll ul li").each(function () {
-            if ($(this).find("img").attr("src")) {
-              img_path += baseURL + $(this).find("img").attr("src") +",";
+            if ($(this).find("img").attr("bimg")) {
+              img_path += baseURL + $(this).find("img").attr("bimg") +",";
             }
           })
         }else{
-          img_path = `
-          https://www.palletboxsale.com/wp-content/uploads/2018/04/plastic_bulk_bins_for_sale.jpg,
-          https://www.palletboxsale.com/wp-content/uploads/2018/04/pallet_boxes_plastic.png,
-          https://www.palletboxsale.com/wp-content/uploads/2018/04/fruit_pallet_box.jpg,
-          https://www.palletboxsale.com/wp-content/uploads/2018/04/folding_plastic_pallet_boxes.jpg
-          `
+          img_path = _.take(_.shuffle(preparedImgArr), 4).join();
         }
        
         return ([
@@ -175,7 +187,7 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
         password: "ABCsujie168168",
         database: "nodedb"
       });
-      var tableName = "lantingpalletbox"
+      var tableName = "lantingpalletbox180411"
       con.connect(function (err) {
         if (err) throw err;
         console.log("Connected!");

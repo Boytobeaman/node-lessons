@@ -12,6 +12,7 @@ var catOne = {
     keywords: [
         "collapsible plastic storage boxes with lids",
         "foldable plastic storage bins",
+        "collapsible crate with lid",
         "small collapsible crates",
         "collapsible crate with handles",
         "heavy duty folding storage boxes",
