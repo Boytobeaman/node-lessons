@@ -30,6 +30,10 @@ var disorganizeArr = function (arr) {
 var disordered_total_promote_cat = disorganizeArr(total_promote_cat.splice(0));
 
 module.exports = {
+    getRandomArrValue: function (arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    },
+    disordered_total_promote_cat: disordered_total_promote_cat,
     internal: function (address) {
         var target_host = url.parse(address, true).host;
         var prefix = 'We also offer ';

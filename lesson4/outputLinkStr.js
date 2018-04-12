@@ -11,7 +11,12 @@ var tempArr =[2,3,4,5,7,8,9]
 const getLinkStr = require('./getLinks');
 
 
-console.log(getLinkStr.links(adr))
+
+for (let index = 0; index < 4; index++) {
+    console.log(getLinkStr.links(adr))
+    console.log(index)
+}
+
 
 
 
