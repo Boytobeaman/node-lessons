@@ -12,6 +12,8 @@ var movingCrates = {
     keywords: [
         "best plastic containers for moving",
         "plastic moving containers for sale",
+        "moving totes",
+        "plastic moving totes",
         "plastic moving bins",
         "moving totes for sale",
         "plastic moving crates for sale",

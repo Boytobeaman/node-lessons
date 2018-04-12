@@ -1,6 +1,7 @@
 var superagent = require('superagent');
 var cheerio = require('cheerio');
 var url = require('url');
+var _ = require("lodash");
 
 var async = require('async');
 var mysql = require('mysql');
@@ -108,7 +109,7 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
         var dynamic_load;
         var volumn;
         var model;
-        var img_path;
+        var img_path = '';
         var backlinks = getLinkStr.links(publishURL);
 
         post_title = newKeywordArr[keywordIndex]
@@ -187,7 +188,7 @@ var cnodeUrl = 'http://www.cnplasticpallet.com/plastic-pallet-box/';
         password: "ABCsujie168168",
         database: "nodedb"
       });
-      var tableName = "lantingpalletbox180411"
+      var tableName = "lantingpalletbox"
       con.connect(function (err) {
         if (err) throw err;
         console.log("Connected!");
