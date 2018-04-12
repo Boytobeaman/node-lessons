@@ -27,22 +27,19 @@ var disorganizeArr = function (arr) {
     return arr.sort(() => Math.random() - 0.5);
 };
 
-var disordered_total_promote_cat = disorganizeArr(total_promote_cat.splice(0));
 
 module.exports = {
-    getRandomArrValue: function (arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-    },
-    disordered_total_promote_cat: disordered_total_promote_cat,
     internal: function (address) {
         var target_host = url.parse(address, true).host;
         var prefix = 'We also offer ';
         var suffix = 'We will try our best to serve you!<br>';
         var element = "";
-        for (let index = 0; index < disordered_total_promote_cat.length; index++) {
-            disordered_total_promote_cat[index].websites.forEach(function (value) {
+        var newDisorderedArr = disorganizeArr(total_promote_cat.concat());
+        for (let index = 0; index < newDisorderedArr.length; index++) {
+            var websites = disorganizeArr(newDisorderedArr[index].websites.concat());
+            websites.forEach(function (value) {
                 if (url.parse(value, true).host == target_host) {
-                    element += `<a href="${value}" target="_blank">${getRandomArrValue(disordered_total_promote_cat[index].keywords)}</a>,`
+                    element += `<a href="${value}" target="_blank">${getRandomArrValue(newDisorderedArr[index].keywords)}</a>,`
                 }
             })
         }
@@ -53,11 +50,12 @@ module.exports = {
         var prefix = 'You can also buy ';
         var suffix = 'Welcome to our store!<br>';
         var element = "";
-        for (let index = 0; index < disordered_total_promote_cat.length; index++) {
-            var websites = disorganizeArr(disordered_total_promote_cat[index].websites.splice(0))
+        var newDisorderedArr = disorganizeArr(total_promote_cat.concat());
+        for (let index = 0; index < newDisorderedArr.length; index++) {
+            var websites = disorganizeArr(newDisorderedArr[index].websites.concat());
             for (let websitesIndex = 0; websitesIndex < websites.length; websitesIndex++) {
                 if (url.parse(websites[websitesIndex], true).host != target_host) {
-                    element += `<a href="${websites[websitesIndex]}" target="_blank">${getRandomArrValue(disordered_total_promote_cat[index].keywords)}</a>,`
+                    element += `<a href="${websites[websitesIndex]}" target="_blank">${getRandomArrValue(newDisorderedArr[index].keywords)}</a>,`
                     break
                 }
             }
