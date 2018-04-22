@@ -4,7 +4,8 @@ var movingCrates = {
         "https://www.plastic-crate.com/product-category/attached-lid-containers/",
         "https://www.chinacrates.com/product-category/attached-lid-distribution-containers/",
         "http://www.joinplastic.com/products/attached-lid-containers/attached-lid-containers.php",
-        "https://www.palletboxsale.com/product-category/plastic-moving-crates/"
+        "https://www.palletboxsale.com/product-category/plastic-moving-crates/",
+        "https://www.cnboxstore.com/product-category/plastic-moving-totes/",
     ],
     rankedKeywords: [
 

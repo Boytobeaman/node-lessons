@@ -4,7 +4,8 @@ var palletBox = {
         "https://www.plastic-crate.com/product-category/plastic-pallet-boxes/",
         "https://www.chinacrates.com/product-category/plastic-pallet-box/",
         "http://www.joinplastic.com/products/palletBox/palletBox.php",
-        "https://www.palletboxsale.com/product-category/plastic-pallet-boxes/"
+        "https://www.palletboxsale.com/product-category/plastic-pallet-boxes/",
+        "https://www.cnboxstore.com/product-category/plastic-pallet-bins/",
     ],
     rankedKeywords: [
 

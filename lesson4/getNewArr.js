@@ -10,6 +10,9 @@ function getNewArr(rawArray,minWordLength) {
                     rawArray.splice(index, 1);
                     rawArray.splice(0, 1);
                     break
+                } else if (index == rawArray.length - 1) {
+                    PBArray.push(first);
+                    rawArray.splice(0, 1)
                 }
             }
         } else {

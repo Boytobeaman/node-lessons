@@ -4,7 +4,8 @@ var stackingCrates = {
         "https://www.plastic-crate.com/product-category/stackable-storage-bins/",
         "https://www.chinacrates.com/product-category/plastic-stacking-crates/",
         "http://www.joinplastic.com/products/stackableBox/stackableBox.php",
-        "https://www.palletboxsale.com/product-category/euro-stacking-containers/"
+        "https://www.palletboxsale.com/product-category/euro-stacking-containers/",
+        "https://www.cnboxstore.com/product-category/euro-stacking-containers/",
     ],
     rankedKeywords: [
 
